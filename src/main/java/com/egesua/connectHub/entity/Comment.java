@@ -13,6 +13,6 @@ public class Comment {
     private Long postId;
     private Long userId;
 
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "text")
     private String text;
 }

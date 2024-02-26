@@ -16,6 +16,6 @@ public class Post {
     private Long userId;
     private String title;
 
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "text")
     private String text;
 }
