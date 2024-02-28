@@ -1,6 +1,8 @@
 package com.egesua.connectHub.controller;
 
 import com.egesua.connectHub.entity.Post;
+import com.egesua.connectHub.requests.PostCreateRequest;
+import com.egesua.connectHub.requests.PostUpdateRequest;
 import com.egesua.connectHub.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +30,17 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createOnePost(@RequestBody Post newPost) {
-        return postService.createOnePost(newPost);
+    public Post createOnePost(@RequestBody PostCreateRequest newPostRequest) {
+        return postService.createOnePost(newPostRequest);
     }
 
+    @PutMapping("/{postId}")
+    public Post updateOnePost(@PathVariable Long postId, @RequestBody PostUpdateRequest updatePostRequest) {
+        return postService.updateOnePostById(postId, updatePostRequest);
+    }
+
+    @DeleteMapping("/{postId}")
+    public void deleteOnePost(@PathVariable Long postId) {
+        postService.deleteOnePostById(postId);
+    }
 }
