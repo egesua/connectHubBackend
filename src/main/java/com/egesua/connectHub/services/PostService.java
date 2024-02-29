@@ -5,10 +5,12 @@ import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.PostRepository;
 import com.egesua.connectHub.requests.PostCreateRequest;
 import com.egesua.connectHub.requests.PostUpdateRequest;
+import com.egesua.connectHub.response.PostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -21,12 +23,13 @@ public class PostService {
         this.userService = userService;
     }
 
-    public List<Post> getAllPosts(Optional<Long> userId) {
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> list;
         if(userId.isPresent()){
-            return postRepository.findByUserId(userId.get());
-        } else {
-            return postRepository.findAll();
+            list = postRepository.findByUserId(userId.get());
         }
+            list = postRepository.findAll();
+            return list.stream().map(post -> new PostResponse(post)).collect(Collectors.toList());
     }
 
     public Post getOnePostById(Long postId) {

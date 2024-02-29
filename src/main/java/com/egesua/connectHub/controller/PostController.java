@@ -3,6 +3,7 @@ package com.egesua.connectHub.controller;
 import com.egesua.connectHub.entity.Post;
 import com.egesua.connectHub.requests.PostCreateRequest;
 import com.egesua.connectHub.requests.PostUpdateRequest;
+import com.egesua.connectHub.response.PostResponse;
 import com.egesua.connectHub.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId) {
+    public List<PostResponse> getAllPosts(@RequestParam Optional<Long> userId) {
         return postService.getAllPosts(userId);
     }
 
