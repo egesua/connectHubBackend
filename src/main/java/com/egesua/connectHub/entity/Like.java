@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "p_like")
 public class Like {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
