@@ -1,11 +1,14 @@
 package com.egesua.connectHub.services;
 
+import com.egesua.connectHub.entity.Like;
 import com.egesua.connectHub.entity.Post;
 import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.PostRepository;
 import com.egesua.connectHub.requests.PostCreateRequest;
 import com.egesua.connectHub.requests.PostUpdateRequest;
+import com.egesua.connectHub.response.LikeResponse;
 import com.egesua.connectHub.response.PostResponse;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +16,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Setter
 public class PostService {
 
     private PostRepository postRepository;
     private UserService userService;
+    private LikeService likeService;
 
     public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
@@ -27,9 +32,11 @@ public class PostService {
         List<Post> list;
         if(userId.isPresent()){
             list = postRepository.findByUserId(userId.get());
-        }
+        } else
             list = postRepository.findAll();
-            return list.stream().map(post -> new PostResponse(post)).collect(Collectors.toList());
+        return list.stream().map(p -> {
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(null, Optional.of(p.getId()));
+            return new PostResponse(p, likes);}).collect(Collectors.toList());
     }
 
     public Post getOnePostById(Long postId) {
