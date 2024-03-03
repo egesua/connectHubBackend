@@ -1,6 +1,5 @@
 package com.egesua.connectHub.services;
 
-import com.egesua.connectHub.entity.Like;
 import com.egesua.connectHub.entity.Post;
 import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.PostRepository;
@@ -35,7 +34,7 @@ public class PostService {
         } else
             list = postRepository.findAll();
         return list.stream().map(p -> {
-            List<LikeResponse> likes = likeService.getAllLikesWithParam(null, Optional.of(p.getId()));
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getId()));
             return new PostResponse(p, likes);}).collect(Collectors.toList());
     }
 
