@@ -8,6 +8,7 @@ import com.egesua.connectHub.requests.PostUpdateRequest;
 import com.egesua.connectHub.response.LikeResponse;
 import com.egesua.connectHub.response.PostResponse;
 import lombok.Setter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +23,12 @@ public class PostService {
     private UserService userService;
     private LikeService likeService;
 
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService, LikeService likeService) {
         this.postRepository = postRepository;
         this.userService = userService;
+        this.likeService = likeService;
     }
+
 
     public List<PostResponse> getAllPosts(Optional<Long> userId) {
         List<Post> list;

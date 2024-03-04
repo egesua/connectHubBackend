@@ -6,6 +6,7 @@ import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.CommentRepository;
 import com.egesua.connectHub.requests.CommentCreateRequest;
 import com.egesua.connectHub.requests.CommentUpdateRequest;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

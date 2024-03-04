@@ -2,6 +2,7 @@ package com.egesua.connectHub.services;
 
 import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.UserRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

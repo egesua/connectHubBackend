@@ -6,6 +6,7 @@ import com.egesua.connectHub.entity.User;
 import com.egesua.connectHub.repository.LikeRepository;
 import com.egesua.connectHub.requests.LikeCreateRequest;
 import com.egesua.connectHub.response.LikeResponse;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
