@@ -1,27 +1,24 @@
 package com.egesua.connectHub.config;
 
+import com.egesua.connectHub.security.JwtAuthenticationEntryPoint;
+import com.egesua.connectHub.security.JwtAuthenticationFilter;
+import com.egesua.connectHub.services.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import com.egesua.connectHub.security.JwtAuthenticationEntryPoint;
-import com.egesua.connectHub.security.JwtAuthenticationFilter;
-import com.egesua.connectHub.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -69,23 +66,21 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
-    @Bean
+    @SuppressWarnings("deprecation")
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .authorizeRequests(request )
-                .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(handler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/posts")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/comments")
-                .permitAll()
-                .antMatchers("/auth/**")
-                .permitAll()
-                .anyRequest().authenticated();
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(handler))
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(HttpMethod.GET, "/posts").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/comments").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated()
+                );
 
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtAuthenticationFilter(), AuthenticationFilter.class);
+
         return httpSecurity.build();
     }
 }
